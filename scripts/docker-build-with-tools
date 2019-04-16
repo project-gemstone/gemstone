@@ -1,0 +1,128 @@
+#!/bin/bash
+# docker-build-with-tools is a script to build base quary packages using a pre-built toolchain in a docker container.
+
+PKG=(linux-api-headers)
+
+if [ ! -f /tools ] ; then
+   echo "=====> No tools linked to toolchain..."
+   exit 99
+fi
+
+create_chroot() {
+	echo "======> Creating chroot dirs..."
+	mkdir -pv $ROOTFS/{dev,proc,sys,run,etc,bin,sbin}
+	mkdir -pv $ROOTFS/usr/{bin,lib}
+
+	mknod -m 600 $ROOTFS/dev/console c 5 1 || true
+    mknod -m 666 $ROOTFS/dev/null c 1 3 || true
+
+	echo "======> Creating resolv file..."
+	echo "nameserver 1.1.1.1" > $ROOTFS/etc/resolv.conf
+
+    echo "======> Copying mkpkg configuration file..."
+    cp $ROOTFS/tools/etc/mkpkg.conf $ROOTFS/etc/mkpkg.conf
+    
+	echo "======> Linking chroot with tools..."
+	ln -sv /tools/bin/{bash,cat,chmod,dd,echo,ln,mkdir,pwd,rm,stty,touch} $ROOTFS/bin
+	ln -sv /tools/bin/{env,install,perl,printf} $ROOTFS/usr/bin
+	ln -sv /tools/lib/libgcc_s.so{,.1} $ROOTFS/usr/lib
+    ln -sv /tools/lib/libstdc++.{a,so{,.6}} $ROOTFS/usr/lib
+
+	echo "======> Create logs..."
+	touch $ROOTFS/var/log/{btmp,lastlog,faillog,wtmp}
+    chgrp -v utmp $ROOTFS/var/log/lastlog
+    chmod -v 664  $ROOTFS/var/log/lastlog
+    chmod -v 600  $ROOTFS/var/log/btmp
+    
+	echo "======> Create logs..."
+	cat > $ROOTFS/etc/passwd << "EOF"
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/dev/null:/bin/false
+daemon:x:6:6:Daemon User:/dev/null:/bin/false
+messagebus:x:18:18:D-Bus Message Daemon User:/var/run/dbus:/bin/false
+nobody:x:99:99:Unprivileged User:/dev/null:/bin/false
+EOF
+
+    echo "======> Create group..."
+	cat > $ROOTFS/etc/group << "EOF"
+root:x:0:
+bin:x:1:daemon
+sys:x:2:
+kmem:x:3:
+tape:x:4:
+tty:x:5:
+daemon:x:6:
+floppy:x:7:
+disk:x:8:
+lp:x:9:
+dialout:x:10:
+audio:x:11:
+video:x:12:
+utmp:x:13:
+usb:x:14:
+cdrom:x:15:
+adm:x:16:
+messagebus:x:18:
+input:x:24:
+mail:x:34:
+kvm:x:61:
+wheel:x:97:
+nogroup:x:99:
+users:x:999:
+EOF
+
+}
+
+mount_chroot() {
+	echo "======> Mounting chroot..."
+	mount --bind /dev $ROOTFS/dev
+	mount -t devpts devpts $ROOTFS/dev/pts -o gid=5,mode=620
+	mount -t proc proc $ROOTFS/proc
+	mount -t sysfs sysfs $ROOTFS/sys
+	mount -t tmpfs tmpfs $ROOTFS/run
+}
+
+umount_chroot() {
+	echo "======> Unmounting chroot..."
+	umount $ROOTFS/dev/pts
+	umount $ROOTFS/dev
+	umount $ROOTFS/run
+	umount $ROOTFS/proc
+	umount $ROOTFS/sys
+}
+
+run_chroot() {
+	echo "======> Running chroot in with command '$1'..."
+	mount_chroot
+
+	if [ -h $ROOTFS/dev/shm ]; then
+	  mkdir -p $ROOTFS/$(readlink $ROOTFS/dev/shm)
+	fi
+
+	chroot "$ROOTFS" /tools/bin/env -i \
+	HOME=/root \
+	TERM="$TERM" \
+    MKPKG_LIB=/tools/lib/project-gemstone/libmkpkg.sh \
+	PS1='\u:\w\$ ' \
+	PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin:/tools/sbin \
+	     /tools/bin/bash +h -c "$@"
+
+	CHROOT_EXIT=$?
+
+	umount_chroot
+	
+	return $CHROOT_EXIT
+}
+
+ROOTFS=$1
+
+create_chroot
+
+for p in ${PKG[@]}; do
+   sync
+   case $p in
+           *)
+		   run_chroot "cd /quary/base/$p && mkpkg"
+		   ;;
+   esac
+done

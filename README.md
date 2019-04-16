@@ -11,7 +11,12 @@ Project Gemstone is a project to create the next Linux operating system focusing
 * Small footprint - `Alpine Linux`
 * Modules (Group packages) and delta binaries - `Intel Clear Linux`
 * A / B Backups - `Container Linux / CoreOS`
-* BUILDPKG packaging format - `Archlinux`
+* BUILDPKG packaging format - `Archlinux / Alpine Linux`
 * From scratch base - `Linux From Scratch / Void Linux / Venom Linux`
+
+## Files in this repo
+
+* `Dockerfile` - Dockerfile used to build `base` packages in the `quary` repository using the prebuilt toolchain which was generated using `mktools`.
+* `scripts/docker-build-with-tools` - Entrypoint script used by the `Dockerfile` to build each package in a certain order.
 
 
