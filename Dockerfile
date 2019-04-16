@@ -13,10 +13,7 @@ WORKDIR /gemstone
 RUN mkdir -p /work
 
 # Install scripts.
-RUN make install-scripts
-
-# Install mkpkg configs.
-RUN make install-conf DESTDIR=/work
+RUN make install
 
 # Install ports collection.
 RUN cd /work && git clone https://github.com/project-gemstone/quary
