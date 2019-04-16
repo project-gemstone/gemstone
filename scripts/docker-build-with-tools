@@ -3,7 +3,7 @@
 
 PKG=(linux-api-headers)
 
-if [ ! -f /tools ] ; then
+if [ ! -h /tools ] ; then
    echo "=====> No tools linked to toolchain..."
    exit 99
 fi
