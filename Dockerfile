@@ -20,7 +20,7 @@ RUN cd /work && git clone https://github.com/project-gemstone/quary
 
 # Download and extract toolchain.
 RUN mkdir -p /work/tools
-RUN cd /work/tools && wget -O tools.tar.gz https://files.jlab.space/x86_64-project_gemstone-linux-gnu-20190416_150917.tar.gz
+RUN cd /work/tools && wget -O tools.tar.gz https://github.com/project-gemstone/gemstone/releases/download/0.0.1/x86_64-project_gemstone-linux-gnu-20190416_150917.tar.gz
 RUN cd /work/tools && tar -xf ./tools.tar.gz
 RUN cd /work/tools && rm tools.tar.gz
 
