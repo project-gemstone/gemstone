@@ -21,7 +21,8 @@ create_chroot() {
 	echo "nameserver 1.1.1.1" > $ROOTFS/etc/resolv.conf
 
         echo "======> Copying mkpkg configuration file..."
-        cp $ROOTFS/tools/etc/mkpkg.conf $ROOTFS/etc/mkpkg.conf
+	mkdir $ROOTFS/etc/mkpkg/
+        cp $ROOTFS/tools/etc/mkpkg.conf $ROOTFS/etc/mkpkg/mkpkg.conf
     
 	echo "======> Linking chroot with tools..."
 	ln -sv /tools/bin/{bash,cat,chmod,dd,echo,ln,mkdir,pwd,rm,stty,touch} $ROOTFS/bin
