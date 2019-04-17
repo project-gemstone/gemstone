@@ -21,7 +21,7 @@ create_chroot() {
 	echo "nameserver 1.1.1.1" > $ROOTFS/etc/resolv.conf
 
         echo "======> Copying mkpkg configuration file..."
-	mkdir $ROOTFS/etc/mkpkg/
+	mkdir -p $ROOTFS/etc/mkpkg/
         cp $ROOTFS/tools/etc/mkpkg.conf $ROOTFS/etc/mkpkg/mkpkg.conf
     
 	echo "======> Linking chroot with tools..."
@@ -30,13 +30,13 @@ create_chroot() {
 	ln -sv /tools/lib/libgcc_s.so{,.1} $ROOTFS/usr/lib
         ln -sv /tools/lib/libstdc++.{a,so{,.6}} $ROOTFS/usr/lib
 
-	echo "======> Create logs..."
+	echo "======> Create log files..."
 	touch $ROOTFS/var/log/{btmp,lastlog,faillog,wtmp}
         chgrp -v utmp $ROOTFS/var/log/lastlog
         chmod -v 664  $ROOTFS/var/log/lastlog
         chmod -v 600  $ROOTFS/var/log/btmp
     
-	echo "======> Create logs..."
+	echo "======> Create passwd file..."
 	cat > $ROOTFS/etc/passwd << "EOF"
 root:x:0:0:root:/root:/bin/bash
 bin:x:1:1:bin:/dev/null:/bin/false
