@@ -33,6 +33,21 @@ create_chroot() {
 	ln -sv /tools/bin/{env,install,perl,printf} $ROOTFS/usr/bin
 	ln -sv /tools/lib/libgcc_s.so{,.1} $ROOTFS/usr/lib
         ln -sv /tools/lib/libstdc++.{a,so{,.6}} $ROOTFS/usr/lib
+	for lib in blkid lzma mount uuid
+	do
+	    ln -sv /tools/lib/lib$lib.so* $ROOTFS/usr/lib
+	done
+	ln -svf /tools/include/blkid    $ROOTFS/usr/include
+        ln -svf /tools/include/libmount $ROOTFS/usr/include
+        ln -svf /tools/include/uuid     $ROOTFS/usr/include
+	install -vdm755 $ROOTFS/usr/lib/pkgconfig
+	
+	for pc in blkid mount uuid
+        do
+            sed 's@tools@usr@g' /tools/lib/pkgconfig/${pc}.pc \
+                > /usr/lib/pkgconfig/${pc}.pc
+        done
+	
 	ln -sv bash $ROOTFS/bin/sh
 
 	echo "======> Create log files..."
@@ -129,10 +144,10 @@ for p in ${PKG[@]}; do
    sync
    case $p in
            *)
-	     run_chroot "m4 --version"
              run_chroot "cd /quary/base/$p && mkpkg"
 	     ;;
 	   glibc)
+	     run_chroot "ln -sfv /tools/lib/gcc /usr/lib"
 	     run_chroot "cd /quary/base/$p && mkpkg --check"
 	     run_chroot "tar -xavf /quary/base/$p/$p-*.tar.xz -C /"
 	     ;;
