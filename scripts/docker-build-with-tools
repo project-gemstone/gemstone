@@ -26,6 +26,7 @@ create_chroot() {
         echo "======> Copying mkpkg configuration file..."
 	mkdir -p $ROOTFS/etc/mkpkg/
         cp $ROOTFS/tools/etc/mkpkg/mkpkg.conf $ROOTFS/etc/mkpkg/mkpkg.conf
+	echo "MKPKG_PORTS=/ports" > $ROOTFS/etc/mkpkg/mkpkg.conf
     
 	echo "======> Linking chroot with tools..."
 	ln -sv /tools/bin/{bash,cat,chmod,dd,echo,ln,mkdir,pwd,rm,stty,touch} $ROOTFS/bin
