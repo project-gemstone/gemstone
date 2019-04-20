@@ -29,7 +29,7 @@ create_chroot() {
 	echo "MKPKG_PORTS=/ports" > $ROOTFS/etc/mkpkg/mkpkg.conf
     
 	echo "======> Linking chroot with tools..."
-	ln -sv /tools/bin/{bash,cat,chmod,dd,echo,ln,mkdir,pwd,rm,stty,touch} $ROOTFS/bin
+	ln -sv /tools/bin/{bash,cat,chmod,dd,echo,ln,mkdir,pwd,rm,stty,touch,m4} $ROOTFS/bin
 	ln -sv /tools/bin/{env,install,perl,printf} $ROOTFS/usr/bin
 	ln -sv /tools/lib/libgcc_s.so{,.1} $ROOTFS/usr/lib
         ln -sv /tools/lib/libstdc++.{a,so{,.6}} $ROOTFS/usr/lib
