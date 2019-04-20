@@ -1,7 +1,10 @@
 #!/bin/bash
 # docker-build-with-tools is a script to build base quary packages using a pre-built toolchain in a docker container.
 
-PKG=(filesystem linux-api-headers)
+PKG=(filesystem 
+linux-api-headers
+glibc
+)
 
 if [ ! -h /tools ] ; then
    echo "=====> No tools linked to toolchain..."
@@ -126,6 +129,10 @@ for p in ${PKG[@]}; do
    case $p in
            *)
              run_chroot "cd /quary/base/$p && mkpkg"
+	     ;;
+	   gcc)
+	     run_chroot "cd /quary/base/$p && mkpkg --check"
+	     run_chroot "tar -xavf /quary/base/$p/$p-*.tar.xz -C /"
 	     ;;
    esac
 done
