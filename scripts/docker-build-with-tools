@@ -131,7 +131,7 @@ for p in ${PKG[@]}; do
 	     m4 --version
              run_chroot "cd /quary/base/$p && mkpkg"
 	     ;;
-	   gcc)
+	   glibc)
 	     run_chroot "cd /quary/base/$p && mkpkg --check"
 	     run_chroot "tar -xavf /quary/base/$p/$p-*.tar.xz -C /"
 	     ;;
