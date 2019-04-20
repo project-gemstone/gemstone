@@ -128,7 +128,7 @@ for p in ${PKG[@]}; do
    sync
    case $p in
            *)
-	     m4 --version
+	     run_chroot "m4 --version"
              run_chroot "cd /quary/base/$p && mkpkg"
 	     ;;
 	   glibc)
