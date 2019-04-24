@@ -1,8 +1,9 @@
 #!/bin/bash -e
 # docker-build-with-tools is a script to build base quary packages using a pre-built toolchain in a docker container.
 
-PKG=(filesystem 
+PKG=(filesystem
 linux-api-headers
+man-pages
 glibc
 )
 
@@ -150,12 +151,15 @@ create_chroot
 for p in ${PKG[@]}; do
    sync
    case $p in
-           *)
-             run_chroot "cd /quary/base/$p && mkpkg"
-	     ;;
 	   glibc)
 	     run_chroot "ln -sfv /tools/lib/gcc /usr/lib"
 	     run_chroot "cd /quary/base/$p && mkpkg --check"
+	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
+	     run_chroot "tar -xavf /quary/base/$p/$p-*.tar.xz -C /"
+	     ;;
+	   *)
+             run_chroot "cd /quary/base/$p && mkpkg"
+	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
 	     run_chroot "tar -xavf /quary/base/$p/$p-*.tar.xz -C /"
 	     ;;
    esac
