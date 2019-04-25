@@ -12,6 +12,11 @@ readline
 m4
 bc
 binutils
+gmp
+mpfr
+mpc
+shadow
+gcc
 )
 
 if [ ! -h /tools ] ; then
@@ -138,6 +143,31 @@ adjust_toolchain() {
 	rm -v dummy.c a.out dummy.log ;
 }
 
+check_gcc() {
+	echo "=====> Checking gcc..."
+        echo 'int main(){}' > dummy.c
+        cc dummy.c -v -Wl,--verbose &> dummy.log
+        readelf -l a.out | grep ': /lib'
+    
+        echo "=====> Verify start files..."
+        grep -o '/usr/lib.*/crt[1in].*succeeded' dummy.log
+    
+        echo "=====> Verify compiler is searching for the correct header files..."
+        grep -B4 '^ /usr/include' dummy.log
+    
+        echo "=====> Verify linker search path..."
+        grep 'SEARCH.*/usr/lib' dummy.log |sed 's|; |\n|g'
+
+        echo "=====> Verify if we are using correct libc..."
+        grep "/lib.*/libc.so.6 " dummy.log
+
+        echo "=====> Verify dynamic linker..."
+        grep found dummy.log
+    
+        echo "=====> Cleaning up..."
+        rm -v dummy.c a.out dummy.log
+}
+
 mount_chroot() {
 	echo "======> Mounting chroot..."
 	mount --bind /dev $ROOTFS/dev
@@ -201,6 +231,13 @@ for p in ${PKG[@]}; do
 	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
 	     run_chroot "rm /usr/lib/{libncurses.so,libncursesw.so.6}"
 	     run_chroot "tar -xavf /quary/base/$p/$p-*.tar.xz -C /"
+	     ;;
+	   gcc)
+	     run_chroot "cd /quary/base/$p && mkpkg"
+	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
+	     run_chroot "tar -xavf /quary/base/$p/$p-*.tar.xz -C /"
+	     run_chroot "$(type check_gcc | sed '1,3d;$d')"
+	     ;;
 	   *)
              run_chroot "cd /quary/base/$p && mkpkg"
 	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
