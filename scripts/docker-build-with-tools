@@ -5,6 +5,7 @@ PKG=(filesystem
 linux-api-headers
 man-pages
 glibc
+tzdata
 )
 
 if [ ! -h /tools ] ; then
