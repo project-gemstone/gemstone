@@ -6,6 +6,12 @@ linux-api-headers
 man-pages
 glibc
 tzdata
+zlib
+file
+readline
+m4
+bc
+binutils
 )
 
 if [ ! -h /tools ] ; then
@@ -188,6 +194,13 @@ for p in ${PKG[@]}; do
 	     echo "======> Adjusting toolchain..."
 	     run_chroot "$(type adjust_toolchain | sed '1,3d;$d')"
 	     ;;
+	   bc)
+	     run_chroot "ln -sfv /tools/lib/libncursesw.so.6 /usr/lib/libncursesw.so.6"
+	     run_chroot "libncurses.so.6 /usr/lib/libncurses.so"
+             run_chroot "cd /quary/base/$p && mkpkg"
+	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
+	     run_chroot "rm /usr/lib/{libncurses.so,libncursesw.so.6}"
+	     run_chroot "tar -xavf /quary/base/$p/$p-*.tar.xz -C /"
 	   *)
              run_chroot "cd /quary/base/$p && mkpkg"
 	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
