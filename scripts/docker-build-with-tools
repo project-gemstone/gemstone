@@ -223,7 +223,7 @@ for p in ${PKG[@]}; do
 	     ;;
 	   bc)
 	     run_chroot "ln -sfv /tools/lib/libncursesw.so.6 /usr/lib/libncursesw.so.6"
-	     run_chroot "libncurses.so.6 /usr/lib/libncurses.so"
+	     run_chroot "ln -sfv libncurses.so.6 /usr/lib/libncurses.so"
              run_chroot "cd /quary/base/$p && mkpkg"
 	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
 	     run_chroot "rm /usr/lib/{libncurses.so,libncursesw.so.6}"
