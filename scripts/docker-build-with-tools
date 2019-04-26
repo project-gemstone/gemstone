@@ -230,7 +230,7 @@ for p in ${PKG[@]}; do
 	     run_chroot "tar -xavf /quary/base/$p/$p-*.tar.xz -C /"
 	     ;;
 	   gcc)
-	     run_chroot "cd /quary/base/$p && mkpkg"
+	     run_chroot "cd /quary/base/$p && mkpkg --check"
 	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
 	     run_chroot "tar -xavf /quary/base/$p/$p-*.tar.xz -C /"
 	     run_chroot "$(type check_gcc | sed '1,3d;$d')"
