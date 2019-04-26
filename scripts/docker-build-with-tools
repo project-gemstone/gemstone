@@ -220,6 +220,7 @@ for p in ${PKG[@]}; do
 	     run_chroot "tar --keep-directory-symlink -xavpkf /quary/base/$p/$p-*.tar.xz -C /"
 	     echo "======> Adjusting toolchain..."
 	     run_chroot "$(type adjust_toolchain | sed '1,3d;$d')"
+	     run_chroot "rm -f /usr/lib/gcc"
 	     ;;
 	   bc)
 	     run_chroot "ln -sfv /tools/lib/libncursesw.so.6 /usr/lib/libncursesw.so.6"
