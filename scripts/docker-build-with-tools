@@ -72,9 +72,6 @@ create_chroot() {
 
 	echo "======> Create log files..."
 	touch $ROOTFS/var/log/{btmp,lastlog,faillog,wtmp}
-        chgrp -v utmp $ROOTFS/var/log/lastlog
-        chmod -v 664  $ROOTFS/var/log/lastlog
-        chmod -v 600  $ROOTFS/var/log/btmp
     
 	echo "======> Create passwd file..."
 	cat > $ROOTFS/etc/passwd << "EOF"
