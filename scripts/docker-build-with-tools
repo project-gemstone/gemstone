@@ -216,6 +216,7 @@ for p in ${PKG[@]}; do
 	   glibc)
 	     run_chroot "ln -sfv /tools/lib/gcc /usr/lib"
 	     run_chroot "cd /quary/base/$p && mkpkg --check"
+	     run_chroot "cd /usr && chmod o+w -R ."
 	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
 	     run_chroot "tar --keep-directory-symlink -xavpkf /quary/base/$p/$p-*.tar.xz -C /"
 	     echo "======> Adjusting toolchain..."
