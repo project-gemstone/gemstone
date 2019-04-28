@@ -19,6 +19,12 @@ shadow
 gcc
 )
 
+. /root/.bashrc
+
+echo "=====> Here is your enviroment..."
+env
+sleep 10
+
 if [ ! -h /tools ] ; then
    echo "=====> No tools linked to toolchain..."
    exit 99

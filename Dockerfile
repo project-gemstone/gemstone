@@ -13,9 +13,10 @@ WORKDIR /gemstone
 # Make env file.
 RUN make env-docker
 RUN cat ./.bashrc > /root/.bashrc
-RUN echo $PATH && sleep 15
 
 RUN mkdir -p /work
+
+RUN exit 0
 
 # Install scripts.
 RUN cd /gemstone && make install
