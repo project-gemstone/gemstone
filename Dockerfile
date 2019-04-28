@@ -10,6 +10,11 @@ RUN apt-get update && apt-get install make file curl wget git pigz -y && apt-get
 RUN git clone https://github.com/project-gemstone/gemstone && cd /gemstone && git pull origin $BRANCH
 WORKDIR /gemstone
 
+# Make env file.
+RUN make env-docker
+RUN cat ./.bashrc > /root/.bashrc
+RUN echo $PATH && sleep 15
+
 RUN mkdir -p /work
 
 # Install scripts.
