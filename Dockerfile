@@ -63,4 +63,4 @@ USER worker
 WORKDIR /
 RUN source /home/worker/.bash_profile
 
-ENTRYPOINT ["/sbin/docker-build-with-tools", "/work"]
+ENTRYPOINT ["/sbin/docker-entry"]
