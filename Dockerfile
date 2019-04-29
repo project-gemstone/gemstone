@@ -3,14 +3,6 @@ FROM ubuntu:disco
 # We can set the git branch to get by using --build-arg when we use docker build.
 ARG BRANCH=master
 
-ENV WORK=/work
-ENV TOOLS=/work/tools
-ENV SOURCES=/work/sources
-ENV LOGS_DIR=/work/logs
-ENV TOOLS_TGT=x86_64-project_gemstone-linux-gnu
-ENV PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin
-ENV MAKEFLAGS="-j1"
-
 # Update and install packages.
 RUN apt-get update && apt-get install make file curl wget git pigz sudo -y && apt-get autoremove -y
 
@@ -34,7 +26,7 @@ RUN cp /gemstone/.bash_profile /home/worker/.bash_profile
 RUN chown worker:worker -R /home/worker/
 
 RUN echo "worker ALL = NOPASSWD : ALL" >> /etc/sudoers
-RUN echo 'Defaults env_keep += "WORK TOOLS SOURCES LOGS_DIR TOOLS_TGT PATH MAKEFLAGS"' >> /etc/sudoers
+#RUN echo 'Defaults env_keep += "WORK TOOLS SOURCES LOGS_DIR TOOLS_TGT PATH MAKEFLAGS"' >> /etc/sudoers
 
 # Change symlink for bash.
 RUN cd /bin/ && rm sh && ln -s bash sh
@@ -62,6 +54,9 @@ RUN sync
 # Run as worker user.
 USER worker
 WORKDIR /
-RUN source /home/worker/.bash_profile
+RUN source /home/worker/.bash_profile WORK=/work SOURCES=/work/sources LOGS_DIR=/work/logs \
+TOOLS_TGT=x86_64-project_gemstone-linux-gnu \
+PATH=/tools/bin:/bin:/usr/bin \
+TOOLS=/work/tools MAKEFLAGS="-j 1" 
 
 ENTRYPOINT ["/sbin/docker-entry"]
