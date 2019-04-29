@@ -54,9 +54,13 @@ RUN sync
 # Run as worker user.
 USER worker
 WORKDIR /
-RUN source /home/worker/.bash_profile WORK=/work SOURCES=/work/sources LOGS_DIR=/work/logs \
-TOOLS_TGT=x86_64-project_gemstone-linux-gnu \
-PATH=/tools/bin:/bin:/usr/bin \
-TOOLS=/work/tools MAKEFLAGS="-j 1" 
+RUN source /home/worker/.bash_profile
+ENV WORK=/work
+ENV TOOLS=/work/tools
+ENV SOURCES=/work/sources
+ENV LOGS_DIR=/work/logs
+ENV TOOLS_TGT=x86_64-project_gemstone-linux-gnu
+ENV PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin
+ENV MAKEFLAGS="-j1"
 
 ENTRYPOINT ["/sbin/docker-entry"]
