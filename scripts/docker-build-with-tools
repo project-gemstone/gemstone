@@ -205,7 +205,7 @@ run_chroot() {
         MKPKG_LIB=/tools/lib/project-gemstone/libmkpkg.sh \
 	PS1='\u:\w\$ ' \
 	PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin:/tools/sbin \
-	     /tools/bin/bash +h -p -c "$@"
+	     /tools/bin/bash +h --login -c "$@"
 
 	CHROOT_EXIT=$?
 
