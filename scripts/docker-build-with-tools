@@ -19,6 +19,8 @@ shadow
 gcc
 )
 
+. /root/.bashrc
+
 echo "=====> Here is your enviroment..."
 env
 sleep 10
