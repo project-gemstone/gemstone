@@ -3,6 +3,14 @@ FROM ubuntu:disco
 # We can set the git branch to get by using --build-arg when we use docker build.
 ARG BRANCH=master
 
+ENV WORK=/work
+ENV TOOLS=/work/tools
+ENV SOURCES=/work/sources
+ENV LOGS_DIR=/work/logs
+ENV TOOLS_TGT=x86_64-project_gemstone-linux-gnu
+ENV PATH=/tools/bin:/bin:/usr/bin:/sbin:/usr/sbin
+ENV MAKEFLAGS="-j1"
+
 # Update and install packages.
 RUN apt-get update && apt-get install make file curl wget git pigz sudo -y && apt-get autoremove -y
 
