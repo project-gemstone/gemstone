@@ -14,6 +14,7 @@ clean:
 .PHONY: install
 install:
 	install -m755 -D scripts/docker-build-with-tools $(DESTDIR)/sbin/docker-build-with-tools
+	install -m755 -D scripts/docker-entry $(DESTDIR)/sbin/docker-entry
 	
 env-docker:
 	echo "set +h" > .bashrc
