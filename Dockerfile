@@ -23,7 +23,7 @@ RUN adduser worker sudo
 # Copy bashrc and bash_profile for worker.
 RUN cp /gemstone/.bashrc /home/worker/.bashrc
 RUN cp /gemstone/.bash_profile /home/worker/.bash_profile
-RUN chown worker:worker -R /home/worker/*
+RUN chown worker:worker -R /home/worker/
 
 RUN echo "worker ALL = NOPASSWD : ALL" >> /etc/sudoers
 RUN echo 'Defaults env_keep += "TOOLS SOURCES LOGS_DIR TOOLS_TGT PATH MAKEFLAGS"' >> /etc/sudoers
