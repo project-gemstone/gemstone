@@ -13,6 +13,7 @@ WORKDIR /gemstone
 # Make env file.
 RUN make env-docker
 RUN cat ./.bashrc > /root/.bashrc
+RUN cat ./.bash_profile > /root/.bash_profile
 
 # Change symlink for bash.
 RUN cd /bin/ && rm sh && ln -s bash sh
@@ -41,5 +42,6 @@ RUN ln -sv /work/tools /
 RUN sync
 
 WORKDIR /
+RUN source /root/.bash_profile
 
 ENTRYPOINT ["/sbin/docker-build-with-tools", "/work"]
