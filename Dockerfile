@@ -61,6 +61,6 @@ RUN sync
 # Run as worker user.
 USER worker
 WORKDIR /
-RUN source ~/.bash_profile
+RUN source /home/worker/.bash_profile
 
 ENTRYPOINT ["/sbin/docker-build-with-tools", "/work"]
