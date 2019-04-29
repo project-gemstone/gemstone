@@ -8,13 +8,13 @@ echo "=====> Loading bash profile..."
 # execute rest as root
 exec sudo -E -u root /bin/sh - <<EOF
 #  change ownership
-echo "Changing ownership..."
+echo "=====> Changing ownership..."
 chown -R root:root /work/tools
 
 # prevent "bad interpreter: Text file busy"
-echo "Syncing..."
+echo "=====> Syncing..."
 sync
 
-echo "Running the build..."
+echo "=====> Running the build..."
 sh /sbin/docker-build-with-tools /work
 EOF
