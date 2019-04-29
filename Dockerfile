@@ -15,9 +15,9 @@ RUN make env-docker
 RUN cat ./.bashrc > /root/.bashrc
 
 # create lfs user with 'lfs' password
-RUN groupadd worker                                    \
- && useradd -s /bin/bash -g worker -m -k /dev/null lfs \
- && echo "worker:worker" | chpasswd
+RUN groupadd worker
+RUN useradd -s /bin/bash -g worker -m -k /dev/null worker 
+RUN echo "worker:worker" | chpasswd
 RUN adduser worker sudo
 
 # Copy bashrc and bash_profile for worker.
