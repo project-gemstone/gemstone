@@ -3,7 +3,7 @@ set -e
 echo "Starting.."
 
 echo "=====> Loading bash profile..."
-. /home/work/.bashrc
+. /home/worker/.bashrc
 
 # execute rest as root
 exec sudo -E -u root /bin/sh - <<EOF
