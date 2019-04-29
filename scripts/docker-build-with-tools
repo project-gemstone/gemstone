@@ -21,6 +21,10 @@ gcc
 
 echo "=====> Here is your enviroment..."
 env
+echo "bashrc..."
+cat /home/worker/.bashrc
+echo "bash_profile..."
+cat /home/worker/.bash_profile
 sleep 10
 
 if [ ! -h /tools ] ; then
