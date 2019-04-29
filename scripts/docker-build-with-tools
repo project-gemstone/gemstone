@@ -2,7 +2,7 @@
 # docker-build-with-tools is a script to build base quary packages using a pre-built toolchain in a docker container.
 
 echo "=====> Loading bash profile..."
-. /home/work/.bashrc
+. /home/worker/.bashrc
 
 PKG=(filesystem
 linux-api-headers
