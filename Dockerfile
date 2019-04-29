@@ -4,7 +4,7 @@ FROM ubuntu:disco
 ARG BRANCH=master
 
 # Update and install packages.
-RUN apt-get update && apt-get install make file curl wget git pigz -y && apt-get autoremove -y
+RUN apt-get update && apt-get install make file curl wget git pigz sudo -y && apt-get autoremove -y
 
 # Pull repo and install scripts
 RUN git clone https://github.com/project-gemstone/gemstone && cd /gemstone && git pull origin $BRANCH
@@ -18,7 +18,7 @@ RUN cat ./.bashrc > /root/.bashrc
 RUN groupadd worker                                    \
  && useradd -s /bin/bash -g worker -m -k /dev/null lfs \
  && echo "worker:worker" | chpasswd
-RUN adduser lfs sudo
+RUN adduser worker sudo
 
 # Copy bashrc and bash_profile for worker.
 RUN cp /gemstone/.bashrc /home/worker/.bashrc
