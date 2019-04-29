@@ -7,7 +7,7 @@ ARG BRANCH=master
 RUN apt-get update && apt-get install make file curl wget git pigz sudo -y && apt-get autoremove -y
 
 # Pull repo and install scripts
-RUN git clone https://github.com/project-gemstone/gemstone && cd /gemstone && git pull origin $BRANCH
+RUN git clone --single-branch --branch $BRANCH https://github.com/project-gemstone/gemstone
 WORKDIR /gemstone
 
 # Make env file for root.
