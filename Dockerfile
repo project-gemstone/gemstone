@@ -48,9 +48,6 @@ RUN cd /work/tools && rm tools.tar.gz
 # Create link to tools.
 RUN ln -sv /work/tools /
 
-# Change ownership
-RUN chown worker:worker -R /work
-
 # Sync everything.
 RUN sync
 
