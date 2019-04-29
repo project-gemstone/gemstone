@@ -33,8 +33,6 @@ RUN cd /bin/ && rm sh && ln -s bash sh
 
 RUN mkdir -p /work
 
-RUN exit 0
-
 # Install scripts.
 RUN cd /gemstone && make install
 
