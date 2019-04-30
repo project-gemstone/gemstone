@@ -7,7 +7,7 @@ ARG BRANCH=master
 RUN cd /bin && rm sh && ln -s bash sh
 
 # Update and install packages.
-RUN apt-get update && apt-get install make file curl wget git pigz sudo -y && apt-get autoremove -y
+RUN apt-get update && apt-get install make file curl wget git pigz sudo build-essential bison file gawk texinfo -y && apt-get autoremove -y
 
 # Pull repo and install scripts
 RUN git clone --single-branch --branch $BRANCH https://github.com/project-gemstone/gemstone
