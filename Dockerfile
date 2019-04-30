@@ -54,7 +54,7 @@ RUN sync
 
 # Run as worker user.
 USER worker
-WORKDIR /
+WORKDIR /work
 RUN source /home/worker/.bash_profile
 ENV LC_ALL=POSIX
 ENV PATH=/tools/bin:/bin:/usr/bin
