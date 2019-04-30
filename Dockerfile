@@ -27,7 +27,7 @@ RUN cp /gemstone/.bashrc > /root/.bashrc
 RUN cp /gemstone/.bashrc > /home/worker/.bashrc
 RUN cp /gemstone/.bash_profile > /root/.bash_profile
 RUN cp /gemstone/.bash_profile > /home/worker/.bash_profile
-RUN chown worker:worker -R /home/worker/
+RUN chown worker -R /home/worker/
 
 # Make work dir.
 RUN mkdir -p /work
@@ -43,6 +43,7 @@ RUN mkdir -p /work/tools
 RUN cd /work/tools && wget -O tools.tar.gz https://github.com/project-gemstone/gemstone/releases/download/0.0.1/x86_64-project_gemstone-linux-gnu-20190416_150917.tar.gz
 RUN cd /work/tools && tar -xf ./tools.tar.gz
 RUN cd /work/tools && rm tools.tar.gz
+RUN chown worker -R /work
 
 # Create link to tools.
 RUN ln -sv /work/tools /
