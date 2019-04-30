@@ -3,6 +3,9 @@ FROM ubuntu:disco
 # We can set the git branch to get by using --build-arg when we use docker build.
 ARG BRANCH=master
 
+# Change symlink for bash.
+RUN cd /bin && rm sh && ln -s bash sh
+
 # Update and install packages.
 RUN apt-get update && apt-get install make file curl wget git pigz sudo -y && apt-get autoremove -y
 
@@ -10,27 +13,23 @@ RUN apt-get update && apt-get install make file curl wget git pigz sudo -y && ap
 RUN git clone --single-branch --branch $BRANCH https://github.com/project-gemstone/gemstone
 WORKDIR /gemstone
 
-# Make env file for root.
-RUN make env-docker
-RUN cat ./.bashrc > /root/.bashrc
-
 # create lfs user with 'lfs' password
 RUN groupadd worker
 RUN useradd -u 8877 -s /bin/bash -g worker -m -k /dev/null worker 
 RUN echo "worker:worker" | chpasswd
 RUN adduser worker sudo
-
-# Copy bashrc and bash_profile for worker.
-RUN cp /gemstone/.bashrc /home/worker/.bashrc
-RUN cp /gemstone/.bash_profile /home/worker/.bash_profile
-RUN chown worker:worker -R /home/worker/
-
 RUN echo "worker ALL = NOPASSWD : ALL" >> /etc/sudoers
 #RUN echo 'Defaults env_keep += "WORK TOOLS SOURCES LOGS_DIR TOOLS_TGT PATH MAKEFLAGS"' >> /etc/sudoers
 
-# Change symlink for bash.
-RUN cd /bin/ && rm sh && ln -s bash sh
+# Make env file for root and worker
+RUN make env-docker
+RUN cp /gemstone/.bashrc > /root/.bashrc
+RUN cp /gemstone/.bashrc > /home/worker/.bashrc
+RUN cp /gemstone/.bash_profile > /root/.bash_profile
+RUN cp /gemstone/.bash_profile > /home/worker/.bash_profile
+RUN chown worker:worker -R /home/worker/
 
+# Make work dir.
 RUN mkdir -p /work
 
 # Install scripts.
