@@ -16,5 +16,5 @@ echo "=====> Syncing..."
 sync
 
 echo "=====> Running the build..."
-/sbin/docker-build-with-tools /work
+sh /sbin/docker-build-with-tools /work
 EOF
