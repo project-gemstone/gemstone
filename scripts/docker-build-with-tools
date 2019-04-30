@@ -230,8 +230,8 @@ for p in ${PKG[@]}; do
 	     run_chroot "ln -sfv /tools/lib/gcc /usr/lib"
 	     run_chroot "cd /quary/base/$p && mkpkg --check"
 	     run_chroot "cd /usr && chmod o+w -R ."
-	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
-	     run_chroot "tar --keep-directory-symlink -p -x -v -f /quary/base/$p/$p-*.tar.xz -C /"
+	     echo "======> Going to install $p from /quary/base/$p/$p-*.pkg.tar.xz ..."
+	     run_chroot "tar --keep-directory-symlink -p -x -v -f /quary/base/$p/$p-*.pkg.tar.xz  -C /"
 	     echo "======> Adjusting toolchain..."
 	     run_chroot "$(type adjust_toolchain | sed '1,3d;$d')"
 	     run_chroot "rm -f /usr/lib/gcc"
@@ -240,20 +240,27 @@ for p in ${PKG[@]}; do
 	     run_chroot "ln -sfv /tools/lib/libncursesw.so.6 /usr/lib/libncursesw.so.6"
 	     run_chroot "ln -sfv libncurses.so.6 /usr/lib/libncurses.so"
              run_chroot "cd /quary/base/$p && mkpkg"
-	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
+	     echo "======> Going to install $p from /quary/base/$p/$p-*.pkg.tar.xz ..."
 	     run_chroot "rm /usr/lib/{libncurses.so,libncursesw.so.6}"
-	     run_chroot "tar --keep-directory-symlink -p -x -v -f /quary/base/$p/$p-*.tar.xz -C /"
+	     run_chroot "tar --keep-directory-symlink -p -x -v -f /quary/base/$p/$p-*.pkg.tar.xz  -C /"
 	     ;;
 	   gcc)
 	     run_chroot "cd /quary/base/$p && mkpkg --check"
-	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
-	     run_chroot "tar --keep-directory-symlink -p -x -v -f /quary/base/$p/$p-*.tar.xz -C /"
+	     echo "======> Going to install $p from /quary/base/$p/$p-*.pkg.tar.xz ..."
+	     run_chroot "tar --keep-directory-symlink -p -x -v -f /quary/base/$p/$p-*.pkg.tar.xz  -C /"
 	     run_chroot "$(type check_gcc | sed '1,3d;$d')"
 	     ;;
 	   *)
              run_chroot "cd /quary/base/$p && mkpkg"
-	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
-	     run_chroot "tar --keep-directory-symlink -xavpkf /quary/base/$p/$p-*.tar.xz -C /"
+	     echo "======> Going to install $p from /quary/base/$p/$p-*.pkg.tar.xz ..."
+	     run_chroot "tar --keep-directory-symlink -xavpkf /quary/base/$p/$p-*.pkg.tar.xz -C /"
 	     ;;
    esac
+done
+
+mkdir -p /built
+
+for p in ${PKG[@]}; do
+    echo "======> Moving $p package to built dir..."
+    cp -v /quary/base/$p/$p-*.pkg.tar.xz /built
 done
