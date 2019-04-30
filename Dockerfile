@@ -23,10 +23,10 @@ RUN echo "worker ALL = NOPASSWD : ALL" >> /etc/sudoers
 
 # Make env file for root and worker
 RUN make env-docker
-RUN cp /gemstone/.bashrc > /root/.bashrc
-RUN cp /gemstone/.bashrc > /home/worker/.bashrc
-RUN cp /gemstone/.bash_profile > /root/.bash_profile
-RUN cp /gemstone/.bash_profile > /home/worker/.bash_profile
+RUN cp /gemstone/.bashrc /root/.bashrc
+RUN cp /gemstone/.bashrc /home/worker/.bashrc
+RUN cp /gemstone/.bash_profile /root/.bash_profile
+RUN cp /gemstone/.bash_profile /home/worker/.bash_profile
 RUN chown worker -R /home/worker/
 
 # Make work dir.
