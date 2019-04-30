@@ -177,6 +177,7 @@ check_gcc() {
 }
 
 mount_chroot() {
+        sync
 	echo "======> Mounting chroot..."
 	mount --bind /dev $ROOTFS/dev
 	mount -t devpts devpts $ROOTFS/dev/pts -o gid=5,mode=620
@@ -186,6 +187,7 @@ mount_chroot() {
 }
 
 umount_chroot() {
+        sync
 	echo "======> Unmounting chroot..."
 	umount $ROOTFS/dev/pts
 	umount $ROOTFS/dev
@@ -195,6 +197,7 @@ umount_chroot() {
 }
 
 run_chroot() {
+        sync
 	echo "======> Running chroot in with command '$1'..."
 	mount_chroot
 
