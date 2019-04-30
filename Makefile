@@ -27,5 +27,5 @@ env-docker:
 	echo "TOOLS_TGT=x86_64-project_gemstone-linux-gnu" >> .bashrc
 	echo "PATH=/tools/bin:/bin:/usr/bin" >> .bashrc
 	echo "MAKEFLAGS="-j1"" >> .bashrc
-	echo "export WORK TOOLS SOURCES LOGS_DIR TOOLS_TGT PATH MAKEFLAGS" >> .bashrc
+	echo "export LC_ALL WORK TOOLS SOURCES LOGS_DIR TOOLS_TGT PATH MAKEFLAGS" >> .bashrc
 	echo "exec env -i HOME=$HOME TERM=$TERM PS1='\u:\w\$ ' /bin/bash" > .bash_profile
