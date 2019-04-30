@@ -1,4 +1,4 @@
-FROM ubuntu:disco
+FROM debian:8
 
 # We can set the git branch to get by using --build-arg when we use docker build.
 ARG BRANCH=master
