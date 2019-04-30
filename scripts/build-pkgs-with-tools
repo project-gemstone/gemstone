@@ -1,5 +1,11 @@
 #!/bin/bash -e
-# docker-build-with-tools is a script to build base quary packages using a pre-built toolchain in a docker container.
+# build-pkgs-with-tools is a script to build base quary packages using a pre-built toolchain in a docker container.
+
+### ENV ###
+LC_ALL=POSIX
+PATH=/tools/bin:/bin:/usr/bin
+MAKEFLAGS="-j1"
+### END ###
 
 PKG=(filesystem
 linux-api-headers
@@ -18,8 +24,6 @@ mpc
 shadow
 gcc
 )
-
-. /root/.bashrc
 
 echo "=====> Here is your enviroment..."
 env
@@ -190,6 +194,7 @@ umount_chroot() {
 }
 
 run_chroot() {
+        sync
 	echo "======> Running chroot in with command '$1'..."
 	mount_chroot
 
@@ -248,4 +253,11 @@ for p in ${PKG[@]}; do
 	     run_chroot "tar --keep-directory-symlink -xavpkf /quary/base/$p/$p-*.tar.xz -C /"
 	     ;;
    esac
+done
+
+mkdir -p /built
+
+for p in ${PKG[@]}; do
+    echo "======> Moving $p package to built dir..."
+    cp -v $ROOTFS/quary/base/$p/$p-*.pkg.tar.xz /built
 done
