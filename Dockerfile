@@ -16,7 +16,7 @@ WORKDIR /gemstone
 
 # create lfs user with 'lfs' password
 RUN groupadd worker
-RUN useradd -u 8877 -s /bin/bash -g worker -m -k /dev/null worker 
+RUN useradd -u 1000 -s /bin/bash -g worker -m -k /dev/null worker 
 RUN echo "worker:worker" | chpasswd
 RUN adduser worker sudo
 RUN echo "worker ALL = NOPASSWD : ALL" >> /etc/sudoers
