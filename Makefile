@@ -19,6 +19,7 @@ install:
 env-docker:
 	echo "set +h" > .bashrc
 	echo "umask 022" >> .bashrc
+	echo "LC_ALL=POSIX" >> .bashrc
 	echo "WORK=/work" >> .bashrc
 	echo "TOOLS=/work/tools" >> .bashrc
 	echo "SOURCES=/work/sources" >> .bashrc
