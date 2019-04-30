@@ -208,6 +208,7 @@ run_chroot() {
 	chroot "$ROOTFS" /tools/bin/env -i \
 	HOME=/root \
 	TERM="$TERM" \
+	LC_ALL=POSIX \
         MKPKG_LIB=/tools/lib/project-gemstone/libmkpkg.sh \
 	PS1='\u:\w\$ ' \
 	PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin:/tools/sbin /tools/bin/bash --login +h -c "$@"
