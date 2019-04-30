@@ -5,6 +5,7 @@
 LC_ALL=POSIX
 PATH=/tools/bin:/bin:/usr/bin
 MAKEFLAGS="-j1"
+export LC_ALL PATH MAKEFLAGS
 ### END ###
 
 PKG=(filesystem
