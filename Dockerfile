@@ -44,4 +44,4 @@ RUN sync
 WORKDIR /
 RUN source /root/.bash_profile
 
-ENTRYPOINT ["/sbin/docker-build-with-tools", "/work"]
+ENTRYPOINT ["/sbin/build-pkgs-with-tools", "/work"]
