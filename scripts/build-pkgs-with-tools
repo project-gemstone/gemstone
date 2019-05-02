@@ -24,6 +24,15 @@ mpfr
 mpc
 shadow
 gcc
+bzip2
+pkg-config
+ncurses
+attr
+acl
+libcap
+sed
+psmisc
+iana-etc
 )
 
 echo "=====> Here is your enviroment..."
@@ -249,8 +258,14 @@ for p in ${PKG[@]}; do
 	     run_chroot "tar --keep-directory-symlink -p -x -v -f /quary/base/$p/$p-*.tar.xz -C /"
 	     run_chroot "$(type check_gcc | sed '1,3d;$d')"
 	     ;;
+		 perl)
+		   run_chroot "rm /usr/bin/perl"
+		   run_chroot "cd /quary/base/$p && mkpkg"
+	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
+	     run_chroot "tar --keep-directory-symlink -xavpkf /quary/base/$p/$p-*.tar.xz -C /"
+	     ;;
 	   *)
-             run_chroot "cd /quary/base/$p && mkpkg"
+       run_chroot "cd /quary/base/$p && mkpkg"
 	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
 	     run_chroot "tar --keep-directory-symlink -xavpkf /quary/base/$p/$p-*.tar.xz -C /"
 	     ;;
