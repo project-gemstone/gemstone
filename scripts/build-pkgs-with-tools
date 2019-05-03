@@ -33,6 +33,30 @@ libcap
 sed
 psmisc
 iana-etc
+bison
+flex
+grep
+bash
+libtool
+gdbm
+gperf
+expat
+inetutils
+perl
+xml-parser
+intltool
+autoconf
+automake
+xz
+kmod
+gettext
+libelf
+libffi
+openssl
+python
+ninja
+meson
+systemd
 )
 
 echo "=====> Here is your enviroment..."
