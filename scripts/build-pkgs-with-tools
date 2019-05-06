@@ -278,6 +278,7 @@ for p in ${PKG[@]}; do
 	     ;;
 	   gcc)
 	     run_chroot "cd /quary/base/$p && mkpkg"
+	     run_chroot "rm /usr/lib/{libgcc_s.so{,.1},libstdc++.{a,so{,.6}}}"
 	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
 	     run_chroot "tar --keep-directory-symlink -xavpkf /quary/base/$p/$p-*.tar.xz -C /"
 	     run_chroot "$(type check_gcc | sed '1,3d;$d')"
