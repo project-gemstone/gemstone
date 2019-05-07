@@ -50,7 +50,7 @@ automake
 xz
 kmod
 gettext
-libelf
+elfutils
 libffi
 openssl
 python
