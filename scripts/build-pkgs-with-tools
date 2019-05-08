@@ -263,7 +263,7 @@ for p in ${PKG[@]}; do
 	     run_chroot "cd /quary/base/$p && mkpkg --check"
 	     run_chroot "cd /usr && chmod o+w -R ."
 	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
-	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.tar.xz -C /"
+	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.pkg.tar.xz -C /"
 	     echo "======> Adjusting toolchain..."
 	     run_chroot "$(type adjust_toolchain | sed '1,3d;$d')"
 	     run_chroot "rm -f /usr/lib/gcc"
@@ -274,30 +274,30 @@ for p in ${PKG[@]}; do
              run_chroot "cd /quary/base/$p && mkpkg"
 	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
 	     run_chroot "rm /usr/lib/{libncurses.so,libncursesw.so.6}"
-	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.tar.xz -C /"
+	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.pkg.tar.xz -C /"
 	     ;;
 	   gcc)
 	     run_chroot "cd /quary/base/$p && mkpkg"
 	     run_chroot "rm /usr/lib/{libgcc_s.so{,.1},libstdc++.{a,so{,.6}}}"
 	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
-	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.tar.xz -C /"
+	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.pkg.tar.xz -C /"
 	     run_chroot "$(type check_gcc | sed '1,3d;$d')"
 	     ;;
 	   bash)
              run_chroot "cd /quary/base/$p && mkpkg"
 	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
-	     run_chroot "tar --keep-directory-symlink --overwrite -xavpf /quary/base/$p/$p-*.tar.xz -C /"
+	     run_chroot "tar --keep-directory-symlink --overwrite -xavpf /quary/base/$p/$p-*.pkg.tar.xz -C /"
 	     ;;
            perl)
 	     run_chroot "rm /usr/bin/perl"
 	     run_chroot "cd /quary/base/$p && mkpkg"
 	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
-	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.tar.xz -C /"
+	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.pkg.tar.xz -C /"
 	     ;;
 	   *)
              run_chroot "cd /quary/base/$p && mkpkg"
 	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
-	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.tar.xz -C /"
+	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.pkg.tar.xz -C /"
 	     ;;
    esac
 done
