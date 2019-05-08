@@ -57,6 +57,29 @@ python
 ninja
 meson
 systemd
+procps-ng
+e2fsprogs
+coreutils
+check
+diffutils
+gawk
+findutils
+groff
+grub
+less
+gzip
+iproute2
+kbd
+libpipeline
+make
+patch
+dbus
+util-linux
+man-db
+tar
+texinfo
+vim
+mkinitramfs
 )
 
 echo "=====> Here is your enviroment..."
