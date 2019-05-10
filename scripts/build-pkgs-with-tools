@@ -80,6 +80,7 @@ tar
 texinfo
 vim
 mkinitramfs
+cpio
 )
 
 echo "=====> Here is your enviroment..."
