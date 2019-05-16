@@ -1,7 +1,7 @@
-FROM debian:8
+FROM debian:9
 
 # We can set the git branch to get by using --build-arg when we use docker build.
-ARG BRANCH=master
+ARG BRANCH=dev
 
 # Change symlink for bash.
 RUN cd /bin && rm sh && ln -s bash sh
@@ -14,12 +14,18 @@ RUN rm -rf /var/lib/apt/lists/*
 RUN git clone --single-branch --branch $BRANCH https://github.com/project-gemstone/gemstone
 WORKDIR /gemstone
 
-# create lfs user with 'lfs' password
+RUN locale-gen en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+
 RUN groupadd worker
-RUN useradd -u 1000 -s /bin/bash -g worker -m -k /dev/null worker 
-RUN echo "worker:worker" | chpasswd
-RUN adduser worker sudo
+RUN adduser --gecos '' -g worker --shell /bin/bash --disabled-password -m -k /dev/null worker
 RUN echo "worker ALL = NOPASSWD : ALL" >> /etc/sudoers
+
+# create lfs user with 'lfs' password
+#RUN groupadd worker
+#RUN useradd -u 1000 -s /bin/bash -g worker -m -k /dev/null worker 
+#RUN echo "worker:worker" | chpasswd
+#RUN echo "worker ALL = NOPASSWD : ALL" >> /etc/sudoers
 #RUN echo 'Defaults env_keep += "WORK TOOLS SOURCES LOGS_DIR TOOLS_TGT PATH MAKEFLAGS"' >> /etc/sudoers
 
 # Make env file for root and worker
@@ -28,10 +34,13 @@ RUN cp /gemstone/.bashrc /root/.bashrc
 RUN cp /gemstone/.bashrc /home/worker/.bashrc
 RUN cp /gemstone/.bash_profile /root/.bash_profile
 RUN cp /gemstone/.bash_profile /home/worker/.bash_profile
-RUN chown worker -R /home/worker/
+RUN chown worker:worker -R /home/worker/
 
 # Make work dir.
 RUN mkdir -p /work
+
+# Make built dir.
+RUN mkdir -p /built
 
 # Install scripts.
 RUN cd /gemstone && make install
