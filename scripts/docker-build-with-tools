@@ -1,10 +1,12 @@
 #!/bin/bash -e
-# docker-build-with-tools is a script to build base quary packages using a pre-built toolchain in a docker container.
+# build-pkgs-with-tools is a script to build base quary packages using a pre-built toolchain in a docker container.
 
-umask 022
-
-echo "=====> Loading bash profile..."
-. /home/worker/.bashrc
+### ENV ###
+LC_ALL=POSIX
+PATH=/tools/bin:/bin:/usr/bin
+MAKEFLAGS="-j1"
+export LC_ALL PATH MAKEFLAGS
+### END ###
 
 PKG=(filesystem
 linux-api-headers
@@ -22,14 +24,67 @@ mpfr
 mpc
 shadow
 gcc
+bzip2
+pkg-config
+ncurses
+attr
+acl
+libcap
+sed
+psmisc
+iana-etc
+bison
+flex
+grep
+bash
+libtool
+gdbm
+gperf
+expat
+inetutils
+perl
+xml-parser
+intltool
+autoconf
+automake
+xz
+kmod
+gettext
+elfutils
+libffi
+openssl
+python
+ninja
+meson
+systemd
+procps-ng
+e2fsprogs
+coreutils
+check
+diffutils
+gawk
+findutils
+groff
+grub
+less
+gzip
+iproute2
+kbd
+libpipeline
+make
+patch
+dbus
+util-linux
+man-db
+tar
+texinfo
+vim
+mkinitramfs
+cpio
 )
 
 echo "=====> Here is your enviroment..."
 env
-echo "=====> bashrc..."
-cat /home/worker/.bashrc
-echo "=====> bash_profile..."
-cat /home/worker/.bash_profile
 sleep 10
 
 if [ ! -h /tools ] ; then
@@ -179,7 +234,6 @@ check_gcc() {
 }
 
 mount_chroot() {
-        sync
 	echo "======> Mounting chroot..."
 	mount --bind /dev $ROOTFS/dev
 	mount -t devpts devpts $ROOTFS/dev/pts -o gid=5,mode=620
@@ -189,7 +243,6 @@ mount_chroot() {
 }
 
 umount_chroot() {
-        sync
 	echo "======> Unmounting chroot..."
 	umount $ROOTFS/dev/pts
 	umount $ROOTFS/dev
@@ -233,8 +286,8 @@ for p in ${PKG[@]}; do
 	     run_chroot "ln -sfv /tools/lib/gcc /usr/lib"
 	     run_chroot "cd /quary/base/$p && mkpkg --check"
 	     run_chroot "cd /usr && chmod o+w -R ."
-	     echo "======> Going to install $p from /quary/base/$p/$p-*.pkg.tar.xz ..."
-	     run_chroot "tar --keep-directory-symlink -p -x -v -f /quary/base/$p/$p-*.pkg.tar.xz  -C /"
+	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
+	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.pkg.tar.xz -C /"
 	     echo "======> Adjusting toolchain..."
 	     run_chroot "$(type adjust_toolchain | sed '1,3d;$d')"
 	     run_chroot "rm -f /usr/lib/gcc"
@@ -243,20 +296,32 @@ for p in ${PKG[@]}; do
 	     run_chroot "ln -sfv /tools/lib/libncursesw.so.6 /usr/lib/libncursesw.so.6"
 	     run_chroot "ln -sfv libncurses.so.6 /usr/lib/libncurses.so"
              run_chroot "cd /quary/base/$p && mkpkg"
-	     echo "======> Going to install $p from /quary/base/$p/$p-*.pkg.tar.xz ..."
+	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
 	     run_chroot "rm /usr/lib/{libncurses.so,libncursesw.so.6}"
-	     run_chroot "tar --keep-directory-symlink -p -x -v -f /quary/base/$p/$p-*.pkg.tar.xz  -C /"
+	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.pkg.tar.xz -C /"
 	     ;;
 	   gcc)
 	     run_chroot "cd /quary/base/$p && mkpkg --check"
-	     echo "======> Going to install $p from /quary/base/$p/$p-*.pkg.tar.xz ..."
-	     run_chroot "tar --keep-directory-symlink -p -x -v -f /quary/base/$p/$p-*.pkg.tar.xz  -C /"
+	     run_chroot "rm /usr/lib/{libgcc_s.so{,.1},libstdc++.{a,so{,.6}}}"
+	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
+	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.pkg.tar.xz -C /"
 	     run_chroot "$(type check_gcc | sed '1,3d;$d')"
+	     ;;
+	   bash)
+             run_chroot "cd /quary/base/$p && mkpkg"
+	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
+	     run_chroot "tar --keep-directory-symlink --overwrite -xavpf /quary/base/$p/$p-*.pkg.tar.xz -C /"
+	     ;;
+           perl)
+	     run_chroot "rm /usr/bin/perl"
+	     run_chroot "cd /quary/base/$p && mkpkg"
+	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
+	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.pkg.tar.xz -C /"
 	     ;;
 	   *)
              run_chroot "cd /quary/base/$p && mkpkg"
-	     echo "======> Going to install $p from /quary/base/$p/$p-*.pkg.tar.xz ..."
-	     run_chroot "tar --keep-directory-symlink -xavpkf /quary/base/$p/$p-*.pkg.tar.xz -C /"
+	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
+	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.pkg.tar.xz -C /"
 	     ;;
    esac
 done
@@ -265,5 +330,5 @@ mkdir -p /built
 
 for p in ${PKG[@]}; do
     echo "======> Moving $p package to built dir..."
-    cp -v /quary/base/$p/$p-*.pkg.tar.xz /built
+    cp -v $ROOTFS/quary/base/$p/$p-*.pkg.tar.xz /built
 done
