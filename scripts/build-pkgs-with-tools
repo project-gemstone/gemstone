@@ -81,6 +81,7 @@ texinfo
 vim
 mkinitramfs
 cpio
+linux
 )
 
 echo "=====> Here is your enviroment..."
