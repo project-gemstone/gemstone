@@ -306,6 +306,8 @@ for p in ${PKG[@]}; do
 	     echo "======> Going to install $p from /quary/base/$p/$p-*.tar.xz..."
 	     run_chroot "tar --keep-directory-symlink -xavpf /quary/base/$p/$p-*.pkg.tar.xz -C /"
 	     run_chroot "$(type check_gcc | sed '1,3d;$d')"
+	     echo "======> WE ARE DONE HERE."
+	     exit 99
 	     ;;
 	   bash)
              run_chroot "cd /quary/base/$p && mkpkg"
