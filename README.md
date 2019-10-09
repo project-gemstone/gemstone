@@ -11,7 +11,7 @@ Project Gemstone is a project to create the next Linux operating system focusing
 * Small footprint - `Alpine Linux`
 * Modules (Group packages) and delta binaries - `Intel Clear Linux`
 * A / B Backups - `Container Linux / CoreOS`
-* BUILDPKG packaging format - `Archlinux / Alpine Linux`
+* CRUX style packaging format - `CRUX Linux`
 * From scratch base - `Linux From Scratch / Void Linux / Venom Linux`
 
 ## Files in this repo
